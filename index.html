@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video Hub</title>
+  <title>Video Hub Premium</title>
   <style>
     body {
       margin: 0;
@@ -12,31 +12,98 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       font-family: Arial, sans-serif;
       color: #fff;
       text-align: center;
+      overflow: hidden;
+      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1e3c72);
+      background-size: 400% 400%;
+      animation: gradientMove 12s ease infinite;
     }
 
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Splash intro */
+    .splash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(-45deg, #141e30, #243b55);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+      animation: fadeOut 1s ease forwards;
+      animation-delay: 2s;
+    }
+
+    .splash h1 {
+      font-size: 32px;
+      margin: 0;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .splash p {
+      margin-top: 10px;
+      font-size: 16px;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 0.5s;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    /* Main content */
     h1 {
-      font-size: 28px;
+      font-size: 32px;
       margin-bottom: 12px;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: fadeInDown 1.2s ease forwards;
+      animation-delay: 2.2s;
     }
 
     p {
       font-size: 16px;
-      margin-bottom: 50px; /* kasih jarak dengan tombol */
-      opacity: 0.8;
+      margin-bottom: 50px;
+      opacity: 0;
+      animation: fadeIn 2s ease forwards;
+      animation-delay: 2.8s;
+    }
+
+    @keyframes fadeInDown {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
 
     .button-container {
       display: flex;
       gap: 30px;
-      background: rgba(255, 255, 255, 0.08);
       padding: 20px 30px;
       border-radius: 20px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+      animation-delay: 3.2s;
     }
 
     .btn {
@@ -48,56 +115,157 @@
       color: #fff;
       font-size: 14px;
       font-weight: bold;
-      transition: 0.3s;
+      opacity: 0;
+      animation: popUp 0.8s ease forwards;
+      cursor: pointer;
     }
 
     .circle {
-      width: 60px;
-      height: 60px;
+      width: 65px;
+      height: 65px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 22px;
       margin-bottom: 6px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+      box-shadow: 0 0 15px rgba(255,255,255,0.4);
       transition: 0.3s;
     }
 
     .btn:hover .circle {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+      transform: translateY(-6px) scale(1.05);
+      box-shadow: 0 0 25px rgba(255,255,255,0.9);
     }
 
-    .play { background: #28c76f; }
-    .more { background: #7367f0; }
-    .download { background: #00cfe8; }
-    .share { background: #ff9f43; }
+    @keyframes popUp {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Tombol warna */
+    .play { background: #28c76f; animation-delay: 3.4s; }
+    .more { background: #7367f0; animation-delay: 3.6s; }
+    .download { background: #00cfe8; animation-delay: 3.8s; }
+    .share { background: #ff9f43; animation-delay: 4s; }
+
+    /* Modal Share */
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    .modal-content {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      width: 300px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.8);
+      animation: fadeIn 0.5s ease;
+    }
+
+    .modal-content h2 {
+      margin-bottom: 15px;
+      font-size: 20px;
+      color: #fff;
+    }
+
+    .share-options a {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .share-options a:hover {
+      opacity: 0.8;
+    }
+
+    .copy { background: #64748b; }
+    .wa { background: #25D366; }
+    .tg { background: #0088cc; }
+
+    .close {
+      margin-top: 15px;
+      display: inline-block;
+      padding: 8px 20px;
+      background: #ef4444;
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
 
+  <!-- Splash intro -->
+  <div class="splash">
+    <h1>Video Hub Premium</h1>
+    <p>Loading your experience...</p>
+  </div>
+
+  <!-- Konten utama -->
   <h1>Welcome to My Video Hub 🎬</h1>
   <p>Watch the latest videos, anytime, anywhere. Just one click to start the show!</p>
 
   <div class="button-container">
-    <a href="https://videyaxhub.github.io/ivideyaxhub.mp4" class="btn">
-      <div class="circle play">▶</div>
+    <a href="https://videyaxhub.github.io/ivideyaxhub.mp4" class="btn play">
+      <div class="circle">▶</div>
       Play
     </a>
-    <a href="https://videyaxhub.github.io/" class="btn">
-      <div class="circle more">≡</div>
+    <a href="https://videyaxhub.github.io/" class="btn more">
+      <div class="circle">≡</div>
       More
     </a>
-    <a href="https://videyaxhub.github.io/ivideyaxhub.mp4" download class="btn">
-      <div class="circle download">⬇</div>
+    <a href="https://videyaxhub.github.io/ivideyaxhub.mp4" download class="btn download">
+      <div class="circle">⬇</div>
       Download
     </a>
-    <a href="#" class="btn">
-      <div class="circle share">🔗</div>
+    <div class="btn share" onclick="openModal()">
+      <div class="circle">🔗</div>
       Share
-    </a>
+    </div>
   </div>
+
+  <!-- Modal Share -->
+  <div class="modal" id="shareModal">
+    <div class="modal-content">
+      <h2>Share This Video</h2>
+      <div class="share-options">
+        <a href="#" class="copy" onclick="copyLink()">📋 Copy Link</a>
+        <a href="https://wa.me/?text=https://videyaxhub.github.io/ivideyaxhub.mp4" target="_blank" class="wa">💬 WhatsApp</a>
+        <a href="https://t.me/share/url?url=https://videyaxhub.github.io/ivideyaxhub.mp4" target="_blank" class="tg">📨 Telegram</a>
+      </div>
+      <div class="close" onclick="closeModal()">Close</div>
+    </div>
+  </div>
+
+  <script>
+    function openModal() {
+      document.getElementById('shareModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('shareModal').style.display = 'none';
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText("https://videyaxhub.github.io/ivideyaxhub.mp4");
+      alert("Link copied to clipboard!");
+    }
+  </script>
 
 </body>
 </html>
