@@ -3,218 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video Hub Floating Menu</title>
+  <title>Video Hub</title>
   <style>
     body {
       margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(180deg, #0d0f14, #1b1f29);
-      min-height: 100vh;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      font-family: Arial, sans-serif;
       color: #fff;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      overflow-x: hidden;
-    }
-
-    /* Splash intro */
-    .splash {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(135deg, #1b1f29, #0d0f14);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 3000;
-      animation: fadeOut 2.5s ease forwards;
-      animation-delay: 2.5s;
-    }
-    .splash h1 {
-      font-size: 36px;
-      margin: 0;
-      color: #28c76f;
-      opacity: 0;
-      animation: fadeInUp 1.2s ease forwards;
-    }
-    .splash p {
-      margin-top: 15px;
-      font-size: 18px;
-      color: #ddd;
-      opacity: 0;
-      animation: fadeInUp 1.2s ease forwards;
-      animation-delay: 1s;
-    }
-    @keyframes fadeInUp {
-      0% { opacity: 0; transform: translateY(30px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeOut {
-      0% { opacity: 1; visibility: visible; }
-      100% { opacity: 0; visibility: hidden; }
-    }
-
-    header {
       text-align: center;
-      padding: 20px;
-      opacity: 0;
-      animation: fadeInUp 1s ease forwards;
-      animation-delay: 3s;
     }
 
-    /* Floating menu */
-    .fab-menu {
-      position: fixed;
-      bottom: 60px; /* Naik dari bawah */
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      background: rgba(20, 20, 30, 0.95);
-      backdrop-filter: blur(12px);
+    h1 {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 50px; /* kasih jarak dengan tombol */
+      opacity: 0.8;
+    }
+
+    .button-container {
       display: flex;
-      justify-content: space-around;
-      padding: 12px 0 10px;
+      gap: 30px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 20px 30px;
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-      opacity: 0;
-      animation: fadeInUp 1s ease forwards;
-      animation-delay: 3.2s;
-      position: relative; /* FIX indicator */
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     }
 
-    .indicator {
-      position: absolute;
-      bottom: 0;
-      height: 3px;
-      width: 25%;
-      background: linear-gradient(90deg,#20a45a,#28c76f);
-      border-radius: 3px 3px 0 0;
-      transition: transform 0.4s ease, background 0.4s ease;
-    }
-
-    .fab-item {
-      flex: 1;
+    .btn {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
-      text-align: center;
+      justify-content: center;
+      text-decoration: none;
       color: #fff;
-      cursor: pointer;
-      transition: transform 0.25s, color 0.25s;
+      font-size: 14px;
+      font-weight: bold;
+      transition: 0.3s;
     }
-    .fab-icon {
-      width: 55px;
-      height: 55px;
+
+    .circle {
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       font-size: 22px;
-      color: #fff;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-      transition: transform 0.25s, box-shadow 0.25s;
+      margin-bottom: 6px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+      transition: 0.3s;
     }
-    .fab-item:hover .fab-icon {
-      transform: scale(1.1) translateY(-3px);
-      box-shadow: 0 10px 24px rgba(0,0,0,0.6);
-    }
-    .fab-label { font-size: 13px; color: #ddd; }
-    .fab-item.active .fab-label { color: #fff; font-weight: bold; }
 
-    /* Warna tombol */
-    .fab-play { background: linear-gradient(135deg, #28c76f, #20a45a); }
-    .fab-more { background: linear-gradient(135deg, #7367f0, #5e50ee); }
-    .fab-download { background: linear-gradient(135deg, #00cfe8, #0097a7); }
-    .fab-share { background: linear-gradient(135deg, #ff9f43, #ff6f00); }
-
-    /* Animasi klik */
-    @keyframes vibrate {
-      0% { transform: translate(0); }
-      20% { transform: translate(-2px, 2px); }
-      40% { transform: translate(-2px, -2px); }
-      60% { transform: translate(2px, 2px); }
-      80% { transform: translate(2px, -2px); }
-      100% { transform: translate(0); }
+    .btn:hover .circle {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.7);
     }
-    .vibrate { animation: vibrate 0.25s linear; }
+
+    .play { background: #28c76f; }
+    .more { background: #7367f0; }
+    .download { background: #00cfe8; }
+    .share { background: #ff9f43; }
   </style>
 </head>
 <body>
 
-  <!-- Splash intro -->
-  <div class="splash">
-    <h1>Exclusive Videos</h1>
-    <p>Ready to watch? Hit play and dive into the best videos curated for you.</p>
+  <h1>Welcome to My Video Hub 🎬</h1>
+  <p>Watch the latest videos, anytime, anywhere. Just one click to start the show!</p>
+
+  <div class="button-container">
+    <a href="https://videyaxhub.github.io/ivideyaxhub.mp4" class="btn">
+      <div class="circle play">▶</div>
+      Play
+    </a>
+    <a href="https://videyaxhub.github.io/" class="btn">
+      <div class="circle more">≡</div>
+      More
+    </a>
+    <a href="https://videyaxhub.github.io/ivideyaxhub.mp4" download class="btn">
+      <div class="circle download">⬇</div>
+      Download
+    </a>
+    <a href="#" class="btn">
+      <div class="circle share">🔗</div>
+      Share
+    </a>
   </div>
-
-  <!-- Header -->
-  <header>
-    <h1>Welcome to My Video Hub 🎬</h1>
-    <p>Watch the latest videos, anytime, anywhere. Just one click to start the show!</p>
-  </header>
-
-  <!-- Floating FAB menu -->
-  <div class="fab-menu">
-    <div class="indicator"></div>
-    <div class="fab-item active" data-link="https://website-videomu.com/play">
-      <div class="fab-icon fab-play">▶</div>
-      <div class="fab-label">Play</div>
-    </div>
-    <div class="fab-item" data-link="https://website-videomu.com/more">
-      <div class="fab-icon fab-more">📺</div>
-      <div class="fab-label">More</div>
-    </div>
-    <div class="fab-item" data-link="https://website-videomu.com/download">
-      <div class="fab-icon fab-download">⬇</div>
-      <div class="fab-label">Download</div>
-    </div>
-    <div class="fab-item" data-link="https://website-videomu.com/share">
-      <div class="fab-icon fab-share">🔗</div>
-      <div class="fab-label">Share</div>
-    </div>
-  </div>
-
-  <!-- Suara klik -->
-  <audio id="clickSound">
-    <source src="https://www.soundjay.com/buttons/button-16.mp3" type="audio/mpeg">
-  </audio>
-
-  <script>
-    const fabItems = document.querySelectorAll(".fab-item");
-    const clickSound = document.getElementById("clickSound");
-    const indicator = document.querySelector(".indicator");
-
-    fabItems.forEach((item, index) => {
-      item.addEventListener("click", function() {
-        this.querySelector(".fab-icon").classList.add("vibrate");
-        clickSound.currentTime = 0;
-        clickSound.play();
-
-        indicator.style.transform = `translateX(${index * 100}%)`;
-
-        if (this.querySelector(".fab-icon").classList.contains("fab-play")) {
-          indicator.style.background = "linear-gradient(90deg,#20a45a,#28c76f)";
-        } else if (this.querySelector(".fab-icon").classList.contains("fab-more")) {
-          indicator.style.background = "linear-gradient(90deg,#5e50ee,#7367f0)";
-        } else if (this.querySelector(".fab-icon").classList.contains("fab-download")) {
-          indicator.style.background = "linear-gradient(90deg,#0097a7,#00cfe8)";
-        } else if (this.querySelector(".fab-icon").classList.contains("fab-share")) {
-          indicator.style.background = "linear-gradient(90deg,#ff6f00,#ff9f43)";
-        }
-
-        fabItems.forEach(i => i.classList.remove("active"));
-        this.classList.add("active");
-
-        let link = this.getAttribute("data-link");
-        setTimeout(() => { window.location.href = link; }, 600);
-
-        setTimeout(() => this.querySelector(".fab-icon").classList.remove("vibrate"), 400);
-      });
-    });
-  </script>
 
 </body>
 </html>
