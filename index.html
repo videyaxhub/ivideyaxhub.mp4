@@ -3,88 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FAB Menu Interaktif</title>
+  <title>Tombol Video + Indicator + Transition</title>
   <style>
     body {
       margin: 0;
       font-family: "Segoe UI", sans-serif;
       background: linear-gradient(180deg, #0d0f14, #1b1f29);
-      height: 200vh;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       color: #fff;
       overflow-x: hidden;
     }
 
-    /* FAB utama */
-    .fab {
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: rgba(255, 61, 0, 0.85);
-      backdrop-filter: blur(8px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 28px;
-      color: #fff;
-      cursor: grab;
-      box-shadow: 0 0 20px rgba(255,61,0,0.6);
-      z-index: 999;
-      transition: all 0.3s ease;
-      animation: glowBreath 2s infinite;
-      user-select: none;
-    }
-    .fab:active {
-      cursor: grabbing;
+    header {
+      padding: 40px 20px;
+      text-align: center;
     }
 
-    /* Efek glow bernafas */
-    @keyframes glowBreath {
-      0%, 100% { box-shadow: 0 0 12px rgba(255,61,0,0.6); }
-      50% { box-shadow: 0 0 30px rgba(255,61,0,0.9); }
-    }
-
-    /* Tombol menu kecil */
+    /* Container tombol horizontal */
     .fab-menu {
       position: fixed;
-      bottom: 120px;
-      right: 55px;
-      display: none;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
-      z-index: 998;
-    }
-    .fab-menu.active {
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(15,15,20,0.95);
+      backdrop-filter: blur(10px);
       display: flex;
-      animation: fadeIn 0.3s ease;
+      justify-content: space-around;
+      padding: 12px 0 8px;
+      box-shadow: 0 -6px 18px rgba(0,0,0,0.6);
+      z-index: 999;
+      position: relative;
     }
+
+    /* Indicator bar */
+    .indicator {
+      position: absolute;
+      bottom: 0;
+      height: 3px;
+      width: 25%;
+      background: linear-gradient(90deg,#20a45a,#28c76f);
+      border-radius: 3px 3px 0 0;
+      transition: transform 0.4s ease, background 0.4s ease;
+    }
+
+    /* Item tombol + label */
     .fab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.25s, color 0.25s;
+      padding: 5px 0;
+    }
+
+    /* Icon bulat */
+    .fab-icon {
       width: 55px;
       height: 55px;
       border-radius: 50%;
-      background: rgba(115,103,240,0.85);
-      backdrop-filter: blur(8px);
       display: flex;
       justify-content: center;
       align-items: center;
+      font-size: 22px;
       color: #fff;
-      font-size: 20px;
-      cursor: pointer;
-      box-shadow: 0 0 12px rgba(115,103,240,0.5);
-      transform: scale(0);
-      transition: transform 0.3s ease;
-    }
-    .fab-menu.active .fab-item {
-      transform: scale(1);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+      transition: transform 0.25s, box-shadow 0.25s;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .fab-item:hover .fab-icon {
+      transform: scale(1.1) translateY(-3px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.6);
     }
+
+    /* Label teks */
+    .fab-label {
+      font-size: 13px;
+      color: #ddd;
+    }
+    .fab-item.active .fab-label {
+      color: #fff;
+      font-weight: bold;
+    }
+
+    /* Warna berbeda tiap tombol */
+    .fab-play { background: linear-gradient(135deg, #28c76f, #20a45a); }
+    .fab-more { background: linear-gradient(135deg, #7367f0, #5e50ee); }
+    .fab-download { background: linear-gradient(135deg, #00cfe8, #0097a7); }
+    .fab-share { background: linear-gradient(135deg, #ff9f43, #ff6f00); }
 
     /* Vibrate */
     @keyframes vibrate {
@@ -96,25 +108,77 @@
       100% { transform: translate(0); }
     }
     .vibrate { animation: vibrate 0.25s linear; }
+
+    /* Overlay loading */
+    .overlay {
+      position: fixed;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0d0f14;
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      transition: top 0.6s ease;
+    }
+
+    .overlay.active {
+      top: 0;
+    }
+
+    /* Loading animasi */
+    .loader {
+      border: 4px solid rgba(255,255,255,0.2);
+      border-left-color: #28c76f;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-left: 12px;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
 
-  <h1 style="padding:20px; text-align:center;">FAB Menu Interaktif 🚀</h1>
-  <p style="padding:20px; line-height:1.6;">
-    Geser tombol bulat merah ke mana saja → otomatis snap ke sisi layar terdekat.<br>
-    Klik tombol bulat merah → tombol akan meledak jadi menu (Play, More, Download, Share).
-  </p>
+  <header>
+    <h1>Tombol Video Premium 🎬</h1>
+    <p>Navbar interaktif dengan indicator + animasi loading transition.</p>
+  </header>
 
-  <!-- FAB utama -->
-  <div class="fab" id="fabBtn">☰</div>
+  <!-- FAB menu horizontal -->
+  <div class="fab-menu">
+    <div class="indicator"></div>
+    <div class="fab-item active" data-link="https://website-videomu.com/play">
+      <div class="fab-icon fab-play">▶</div>
+      <div class="fab-label">Play</div>
+    </div>
+    <div class="fab-item" data-link="https://website-videomu.com/more">
+      <div class="fab-icon fab-more">📺</div>
+      <div class="fab-label">More</div>
+    </div>
+    <div class="fab-item" data-link="https://website-videomu.com/download">
+      <div class="fab-icon fab-download">⬇</div>
+      <div class="fab-label">Download</div>
+    </div>
+    <div class="fab-item" data-link="https://website-videomu.com/share">
+      <div class="fab-icon fab-share">🔗</div>
+      <div class="fab-label">Share</div>
+    </div>
+  </div>
 
-  <!-- FAB menu -->
-  <div class="fab-menu" id="fabMenu">
-    <div class="fab-item" data-link="https://website-videomu.com/play">▶</div>
-    <div class="fab-item" data-link="https://website-videomu.com/more">📺</div>
-    <div class="fab-item" data-link="https://website-videomu.com/download">⬇</div>
-    <div class="fab-item" data-link="https://website-videomu.com/share">🔗</div>
+  <!-- Overlay loading -->
+  <div class="overlay" id="overlay">
+    Loading <div class="loader"></div>
   </div>
 
   <!-- Suara klik -->
@@ -123,81 +187,47 @@
   </audio>
 
   <script>
-    const fab = document.getElementById("fabBtn");
-    const fabMenu = document.getElementById("fabMenu");
     const fabItems = document.querySelectorAll(".fab-item");
     const clickSound = document.getElementById("clickSound");
+    const indicator = document.querySelector(".indicator");
+    const overlay = document.getElementById("overlay");
 
-    let isDragging = false, offsetX, offsetY;
-
-    // Toggle menu
-    fab.addEventListener("click", () => {
-      if (!isDragging) {
-        fabMenu.classList.toggle("active");
-        clickSound.currentTime = 0;
-        clickSound.play();
-      }
-    });
-
-    // Item menu click
-    fabItems.forEach(item => {
+    fabItems.forEach((item, index) => {
       item.addEventListener("click", function() {
-        this.classList.add("vibrate");
+        // vibrate
+        this.querySelector(".fab-icon").classList.add("vibrate");
         clickSound.currentTime = 0;
         clickSound.play();
+
+        // pindah indicator
+        indicator.style.transform = `translateX(${index * 100}%)`;
+
+        // ganti warna indicator sesuai tombol
+        if (this.querySelector(".fab-icon").classList.contains("fab-play")) {
+          indicator.style.background = "linear-gradient(90deg,#20a45a,#28c76f)";
+        } else if (this.querySelector(".fab-icon").classList.contains("fab-more")) {
+          indicator.style.background = "linear-gradient(90deg,#5e50ee,#7367f0)";
+        } else if (this.querySelector(".fab-icon").classList.contains("fab-download")) {
+          indicator.style.background = "linear-gradient(90deg,#0097a7,#00cfe8)";
+        } else if (this.querySelector(".fab-icon").classList.contains("fab-share")) {
+          indicator.style.background = "linear-gradient(90deg,#ff6f00,#ff9f43)";
+        }
+
+        // ubah aktif
+        fabItems.forEach(i => i.classList.remove("active"));
+        this.classList.add("active");
+
+        // tampilkan overlay animasi
+        overlay.classList.add("active");
+
+        // redirect setelah animasi
         let link = this.getAttribute("data-link");
-        setTimeout(() => { window.location.href = link; }, 800);
-        setTimeout(() => this.classList.remove("vibrate"), 400);
+        setTimeout(() => { window.location.href = link; }, 1500);
+
+        // hapus vibrate
+        setTimeout(() => this.querySelector(".fab-icon").classList.remove("vibrate"), 400);
       });
     });
-
-    // Dragging
-    fab.addEventListener("mousedown", startDrag);
-    fab.addEventListener("touchstart", startDrag);
-
-    function startDrag(e) {
-      isDragging = true;
-      fab.style.transition = "none";
-      let evt = e.type.includes("touch") ? e.touches[0] : e;
-      offsetX = evt.clientX - fab.getBoundingClientRect().left;
-      offsetY = evt.clientY - fab.getBoundingClientRect().top;
-      document.addEventListener("mousemove", onDrag);
-      document.addEventListener("mouseup", stopDrag);
-      document.addEventListener("touchmove", onDrag);
-      document.addEventListener("touchend", stopDrag);
-    }
-
-    function onDrag(e) {
-      if (!isDragging) return;
-      let evt = e.type.includes("touch") ? e.touches[0] : e;
-      let x = evt.clientX - offsetX;
-      let y = evt.clientY - offsetY;
-      fab.style.left = x + "px";
-      fab.style.top = y + "px";
-      fab.style.right = "auto";
-      fab.style.bottom = "auto";
-    }
-
-    function stopDrag() {
-      if (!isDragging) return;
-      isDragging = false;
-      fab.style.transition = "all 0.3s ease";
-      document.removeEventListener("mousemove", onDrag);
-      document.removeEventListener("mouseup", stopDrag);
-      document.removeEventListener("touchmove", onDrag);
-      document.removeEventListener("touchend", stopDrag);
-
-      // Snap ke sisi terdekat
-      let screenWidth = window.innerWidth;
-      let fabRect = fab.getBoundingClientRect();
-      if (fabRect.left + fabRect.width/2 < screenWidth / 2) {
-        fab.style.left = "15px";
-        fab.style.right = "auto";
-      } else {
-        fab.style.right = "15px";
-        fab.style.left = "auto";
-      }
-    }
   </script>
 
 </body>
