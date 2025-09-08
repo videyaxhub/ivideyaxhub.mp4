@@ -3,95 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tombol Play & More Video</title>
+  <title>FAB Menu Interaktif</title>
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: "Segoe UI", sans-serif;
       background: linear-gradient(180deg, #0d0f14, #1b1f29);
+      height: 200vh;
       color: #fff;
-      padding-bottom: 100px; /* biar konten tidak ketutup tombol */
-    }
-    header {
-      padding: 40px 20px;
-      text-align: center;
-    }
-    header h1 {
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
-    header p {
-      color: #aaa;
-      font-size: 16px;
+      overflow-x: hidden;
     }
 
-    /* Sticky buttons container */
-    .sticky-buttons {
+    /* FAB utama */
+    .fab {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(15,15,20,0.95);
+      bottom: 90px;
+      right: 20px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(255, 61, 0, 0.85);
+      backdrop-filter: blur(8px);
       display: flex;
-      justify-content: space-around;
-      padding: 16px 10px;
-      box-shadow: 0 -6px 18px rgba(0,0,0,0.6);
-      transform: translateY(100%);
-      animation: slideUp 0.8s ease-out forwards;
-    }
-
-    /* Button style */
-    .btn {
-      flex: 1;
-      margin: 0 8px;
-      text-align: center;
-      text-decoration: none;
-      padding: 14px 0;
-      font-size: 18px;
-      font-weight: bold;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
       color: #fff;
-      background: linear-gradient(135deg, #28c76f, #20a45a);
-      border-radius: 14px;
-      box-shadow: 0 4px 15px rgba(40,199,111,.5);
-      transition: all 0.25s ease;
-      position: relative;
-      overflow: hidden;
+      cursor: grab;
+      box-shadow: 0 0 20px rgba(255,61,0,0.6);
+      z-index: 999;
+      transition: all 0.3s ease;
+      animation: glowBreath 2s infinite;
+      user-select: none;
+    }
+    .fab:active {
+      cursor: grabbing;
     }
 
-    .btn:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 8px 24px rgba(40,199,111,.6);
+    /* Efek glow bernafas */
+    @keyframes glowBreath {
+      0%, 100% { box-shadow: 0 0 12px rgba(255,61,0,0.6); }
+      50% { box-shadow: 0 0 30px rgba(255,61,0,0.9); }
     }
 
-    .btn::after {
-      content: "";
-      position: absolute;
-      top: 0; left: -75%;
-      width: 50%; height: 100%;
-      background: rgba(255,255,255,.25);
-      transform: skewX(-25deg);
+    /* Tombol menu kecil */
+    .fab-menu {
+      position: fixed;
+      bottom: 120px;
+      right: 55px;
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      z-index: 998;
     }
-    .btn:hover::after {
-      left: 125%;
-      transition: left 0.5s;
+    .fab-menu.active {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+    .fab-item {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: rgba(115,103,240,0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(115,103,240,0.5);
+      transform: scale(0);
+      transition: transform 0.3s ease;
+    }
+    .fab-menu.active .fab-item {
+      transform: scale(1);
     }
 
-    /* More Video button special color */
-    .btn.more {
-      background: linear-gradient(135deg, #7367f0, #5e50ee);
-      box-shadow: 0 4px 15px rgba(115,103,240,.5);
-    }
-    .btn.more:hover {
-      box-shadow: 0 8px 24px rgba(115,103,240,.6);
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Slide in animation */
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-
-    /* Vibrate animation */
+    /* Vibrate */
     @keyframes vibrate {
       0% { transform: translate(0); }
       20% { transform: translate(-2px, 2px); }
@@ -100,46 +95,109 @@
       80% { transform: translate(2px, -2px); }
       100% { transform: translate(0); }
     }
-    .vibrate {
-      animation: vibrate 0.3s linear;
-    }
+    .vibrate { animation: vibrate 0.25s linear; }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Selamat Datang di Website Video Saya</h1>
-    <p>Tonton video favoritmu dengan mudah hanya sekali klik!</p>
-  </header>
+  <h1 style="padding:20px; text-align:center;">FAB Menu Interaktif 🚀</h1>
+  <p style="padding:20px; line-height:1.6;">
+    Geser tombol bulat merah ke mana saja → otomatis snap ke sisi layar terdekat.<br>
+    Klik tombol bulat merah → tombol akan meledak jadi menu (Play, More, Download, Share).
+  </p>
 
-  <main>
-    <p style="padding:20px; line-height:1.6;">
-      Ini contoh konten halaman. Kamu bisa menambahkan banner, deskripsi, artikel, 
-      atau iklan. Coba scroll ke bawah biar kelihatan efek tombol sticky di HP 👍
-    </p>
-    <div style="height:1000px"></div>
-  </main>
+  <!-- FAB utama -->
+  <div class="fab" id="fabBtn">☰</div>
 
-  <!-- Tombol Sticky -->
-  <div class="sticky-buttons">
-    <a href="https://website-videomu.com/play" class="btn" id="playBtn">▶ PLAY</a>
-    <a href="https://website-videomu.com/more" class="btn more" id="moreBtn">📺 MORE VIDEO</a>
+  <!-- FAB menu -->
+  <div class="fab-menu" id="fabMenu">
+    <div class="fab-item" data-link="https://website-videomu.com/play">▶</div>
+    <div class="fab-item" data-link="https://website-videomu.com/more">📺</div>
+    <div class="fab-item" data-link="https://website-videomu.com/download">⬇</div>
+    <div class="fab-item" data-link="https://website-videomu.com/share">🔗</div>
   </div>
 
+  <!-- Suara klik -->
+  <audio id="clickSound">
+    <source src="https://www.soundjay.com/buttons/button-16.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
-    // Tambahkan efek getar saat tombol diklik
-    const buttons = document.querySelectorAll('.btn');
-    buttons.forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault(); // stop dulu biar getar keliatan
-        this.classList.add('vibrate');
-        const link = this.href;
-        setTimeout(() => {
-          this.classList.remove('vibrate');
-          window.location.href = link; // lanjut ke link tujuan
-        }, 300);
+    const fab = document.getElementById("fabBtn");
+    const fabMenu = document.getElementById("fabMenu");
+    const fabItems = document.querySelectorAll(".fab-item");
+    const clickSound = document.getElementById("clickSound");
+
+    let isDragging = false, offsetX, offsetY;
+
+    // Toggle menu
+    fab.addEventListener("click", () => {
+      if (!isDragging) {
+        fabMenu.classList.toggle("active");
+        clickSound.currentTime = 0;
+        clickSound.play();
+      }
+    });
+
+    // Item menu click
+    fabItems.forEach(item => {
+      item.addEventListener("click", function() {
+        this.classList.add("vibrate");
+        clickSound.currentTime = 0;
+        clickSound.play();
+        let link = this.getAttribute("data-link");
+        setTimeout(() => { window.location.href = link; }, 800);
+        setTimeout(() => this.classList.remove("vibrate"), 400);
       });
     });
+
+    // Dragging
+    fab.addEventListener("mousedown", startDrag);
+    fab.addEventListener("touchstart", startDrag);
+
+    function startDrag(e) {
+      isDragging = true;
+      fab.style.transition = "none";
+      let evt = e.type.includes("touch") ? e.touches[0] : e;
+      offsetX = evt.clientX - fab.getBoundingClientRect().left;
+      offsetY = evt.clientY - fab.getBoundingClientRect().top;
+      document.addEventListener("mousemove", onDrag);
+      document.addEventListener("mouseup", stopDrag);
+      document.addEventListener("touchmove", onDrag);
+      document.addEventListener("touchend", stopDrag);
+    }
+
+    function onDrag(e) {
+      if (!isDragging) return;
+      let evt = e.type.includes("touch") ? e.touches[0] : e;
+      let x = evt.clientX - offsetX;
+      let y = evt.clientY - offsetY;
+      fab.style.left = x + "px";
+      fab.style.top = y + "px";
+      fab.style.right = "auto";
+      fab.style.bottom = "auto";
+    }
+
+    function stopDrag() {
+      if (!isDragging) return;
+      isDragging = false;
+      fab.style.transition = "all 0.3s ease";
+      document.removeEventListener("mousemove", onDrag);
+      document.removeEventListener("mouseup", stopDrag);
+      document.removeEventListener("touchmove", onDrag);
+      document.removeEventListener("touchend", stopDrag);
+
+      // Snap ke sisi terdekat
+      let screenWidth = window.innerWidth;
+      let fabRect = fab.getBoundingClientRect();
+      if (fabRect.left + fabRect.width/2 < screenWidth / 2) {
+        fab.style.left = "15px";
+        fab.style.right = "auto";
+      } else {
+        fab.style.right = "15px";
+        fab.style.left = "auto";
+      }
+    }
   </script>
 
 </body>
