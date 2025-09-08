@@ -3,21 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video Hub with Splash Intro</title>
+  <title>Video Hub Floating Menu</title>
   <style>
     body {
       margin: 0;
       font-family: "Segoe UI", sans-serif;
       background: linear-gradient(180deg, #0d0f14, #1b1f29);
       min-height: 100vh;
+      color: #fff;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      color: #fff;
+      justify-content: center;
+      align-items: center;
       overflow-x: hidden;
     }
 
-    /* Splash screen */
+    /* Splash intro */
     .splash {
       position: fixed;
       top: 0; left: 0;
@@ -31,7 +32,6 @@
       animation: fadeOut 2.5s ease forwards;
       animation-delay: 2.5s;
     }
-
     .splash h1 {
       font-size: 36px;
       margin: 0;
@@ -39,7 +39,6 @@
       opacity: 0;
       animation: fadeInUp 1.2s ease forwards;
     }
-
     .splash p {
       margin-top: 15px;
       font-size: 18px;
@@ -48,7 +47,6 @@
       animation: fadeInUp 1.2s ease forwards;
       animation-delay: 1s;
     }
-
     @keyframes fadeInUp {
       0% { opacity: 0; transform: translateY(30px); }
       100% { opacity: 1; transform: translateY(0); }
@@ -59,27 +57,27 @@
     }
 
     header {
-      padding: 40px 20px;
       text-align: center;
+      padding: 20px;
       opacity: 0;
       animation: fadeInUp 1s ease forwards;
       animation-delay: 3s;
     }
 
-    /* Navbar tombol (fab menu) */
+    /* Floating menu */
     .fab-menu {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(15,15,20,0.95);
-      backdrop-filter: blur(10px);
+      bottom: 60px; /* Naik dari bawah */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      background: rgba(20, 20, 30, 0.95);
+      backdrop-filter: blur(12px);
       display: flex;
       justify-content: space-around;
-      padding: 12px 0 8px;
-      box-shadow: 0 -6px 18px rgba(0,0,0,0.6);
-      z-index: 999;
-      position: relative;
+      padding: 12px 0 10px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
       opacity: 0;
       animation: fadeInUp 1s ease forwards;
       animation-delay: 3.2s;
@@ -105,9 +103,7 @@
       color: #fff;
       cursor: pointer;
       transition: transform 0.25s, color 0.25s;
-      padding: 5px 0;
     }
-
     .fab-icon {
       width: 55px;
       height: 55px;
@@ -124,15 +120,16 @@
       transform: scale(1.1) translateY(-3px);
       box-shadow: 0 10px 24px rgba(0,0,0,0.6);
     }
-
     .fab-label { font-size: 13px; color: #ddd; }
     .fab-item.active .fab-label { color: #fff; font-weight: bold; }
 
+    /* Warna tombol */
     .fab-play { background: linear-gradient(135deg, #28c76f, #20a45a); }
     .fab-more { background: linear-gradient(135deg, #7367f0, #5e50ee); }
     .fab-download { background: linear-gradient(135deg, #00cfe8, #0097a7); }
     .fab-share { background: linear-gradient(135deg, #ff9f43, #ff6f00); }
 
+    /* Animasi klik */
     @keyframes vibrate {
       0% { transform: translate(0); }
       20% { transform: translate(-2px, 2px); }
@@ -158,7 +155,7 @@
     <p>Watch the latest videos, anytime, anywhere. Just one click to start the show!</p>
   </header>
 
-  <!-- FAB menu -->
+  <!-- Floating FAB menu -->
   <div class="fab-menu">
     <div class="indicator"></div>
     <div class="fab-item active" data-link="https://website-videomu.com/play">
@@ -179,6 +176,7 @@
     </div>
   </div>
 
+  <!-- Suara klik -->
   <audio id="clickSound">
     <source src="https://www.soundjay.com/buttons/button-16.mp3" type="audio/mpeg">
   </audio>
